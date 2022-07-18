@@ -1,0 +1,14 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "button-and-light",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"dirname-filename-esm": "^1.1.1",
+		"express": "^4.17.2",
+		"express-ws": "^5.0.2",
+		"onoff": "^6.0.3"
+	}
+}

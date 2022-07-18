@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Button Pressed</title>
+	</head>
+	<body>
+		<span id="result">Connecting</span>
+		<script>
+			const ws = new WebSocket(`ws://${window.location.host}`)
+			const result = document.getElementById('result')
+			ws.addEventListener('message', async ({ data }) => {
+				const arrayBuffer = await data.arrayBuffer()
+				const [value] = new Uint8Array(arrayBuffer)
+				result.innerText = value ? 'Pressed' : 'Not pressed'
+			})
+		</script>
+	</body>
+</html>

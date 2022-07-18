@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Light Control</title>
+	</head>
+	<body>
+		<span id="result">Loading light status</span><br>
+		<button id="button">Can change light state once light state is loaded</button>
+		<script>
+			const resultSpan = document.getElementById("result")
+			const button = document.getElementById("button")
+			
+			const setResult = result => {
+				resultSpan.innerText = `Light is ${result ? 'on' : 'off'}`
+				button.innerText = `Turn light ${result ? 'off' : 'on'}`
+				button.onclick = () => {
+					button.disabled = true
+					button.innerText = `Turning light ${result ? 'off' : 'on'}`
+					fetch('/api', {
+						method: 'PUT',
+						body: JSON.stringify(!result),
+						headers: { 'Content-Type': 'application/json' }
+					})
+						.then(() => {
+							button.disabled = false
+							setResult(!result)
+						})
+						.catch(() => {
+							console.log(`Error turning light {result ? 'off' : 'on'}`)
+						})
+				}
+			}
+			
+			fetch('/api')
+				.then(res => res.json())
+				.then(setResult)
+				.catch(e => {
+					alert('Error getting light state')
+				})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "button-and-light",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"onoff": "^6.0.3"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"name": "lights",
+	"private": true,
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"onoff": "^6.0.3"
+	}
+}

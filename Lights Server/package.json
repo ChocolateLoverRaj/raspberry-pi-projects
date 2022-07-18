@@ -1,0 +1,14 @@
+{
+	"name": "lights",
+	"private": true,
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"dirname-filename-esm": "^1.1.1",
+		"express": "^4.17.2",
+		"onoff": "^6.0.3"
+	}
+}
