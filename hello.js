@@ -1,1 +1,1 @@
-console.log("This is a message printed from Node.js")
+console.log('This is a message printed from Node.js')
