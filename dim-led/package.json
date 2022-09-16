@@ -1,0 +1,10 @@
+{
+  "name": "dim-led",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@hkaspy/joystick-linux": "^1.2.0",
+    "dotenv": "^16.0.2",
+    "pigpio": "^3.3.1"
+  }
+}
