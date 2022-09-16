@@ -11,4 +11,4 @@ Controls LED with an Xbox controller.
 - Use LT or RT to dim two seperate lights.
 
 ## Wiring
-
+![Wiring Breadboard](https://github.com/ChocolateLoverRaj/raspberry-pi-projects/blob/dddd0bf9a66c31adbf78025792e4a6c69881f526/dim-led/dim-led_bb.png?raw=true)
