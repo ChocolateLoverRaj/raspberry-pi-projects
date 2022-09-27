@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "onoff": "^6.0.3"
+  }
+}
