@@ -1,13 +1,29 @@
 import { config } from 'dotenv'
 import { Gpio } from 'onoff'
-import parseEnvInt from './parseEnvInt.js'
+import parseEnvJson from './parseEnvJson.js'
+import Ajv from 'ajv'
+const ajv = new Ajv()
 config()
 
-const inputs = []
-for (let i = 1; i <= 4; i++) {
-  const gpio = parseEnvInt(`INPUT_${i}_GPIO`)
-  inputs.push(new Gpio(gpio, 'out'))
+const motorPortsArr = parseEnvJson('MOTORS')
+const validate = ajv.compile({
+  type: 'array',
+  items: {
+    type: 'array',
+    items: {
+      type: 'integer'
+    },
+    minItems: 4,
+    maxItems: 4
+  }
+})
+
+if (!validate(motorPortsArr)) {
+  console.log(validate.errors)
+  throw new Error('Invalid MOTORS env var')
 }
+
+const motors = motorPortsArr.map(ports => ports.map(port => new Gpio(port, 'out')))
 
 // From
 // eslint-disable-next-line max-len
@@ -36,13 +52,10 @@ const nanoSecondsPerStep = BigInt(Math.floor(
 
 let step = 0
 while (true) {
+  const stepStartTime = process.hrtime.bigint()
   steps[step].forEach((on, index) => {
-    // console.log(step, index, on)
-    inputs[index].writeSync(on)
+    motors.forEach(motor => motor[index].writeSync(on))
   })
   if (++step === steps.length) step = 0
-  let lastTime = process.hrtime.bigint()
-  let now
-  while ((now = process.hrtime.bigint()) < lastTime + nanoSecondsPerStep);
-  lastTime = now
+  while (process.hrtime.bigint() < stepStartTime + nanoSecondsPerStep);
 }

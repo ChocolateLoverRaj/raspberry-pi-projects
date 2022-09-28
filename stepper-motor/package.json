@@ -2,6 +2,7 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "ajv": "^8.11.0",
     "dotenv": "^16.0.2",
     "onoff": "^6.0.3"
   }
