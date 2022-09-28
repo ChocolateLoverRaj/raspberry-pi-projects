@@ -2,8 +2,12 @@ import { config } from 'dotenv'
 import { Gpio } from 'onoff'
 import parseEnvJson from './parseEnvJson.js'
 import Ajv from 'ajv'
+import intervalSync from './intervalSync.js'
+import { debuglog } from 'util'
 const ajv = new Ajv()
 config()
+
+const revLog = debuglog('rev')
 
 const motorPortsArr = parseEnvJson('MOTORS')
 const validate = ajv.compile({
@@ -51,11 +55,15 @@ const nanoSecondsPerStep = BigInt(Math.floor(
   60 * (10 ** 3) ** 3))
 
 let step = 0
-while (true) {
-  const stepStartTime = process.hrtime.bigint()
+let revSteps = 0
+intervalSync(() => {
   steps[step].forEach((on, index) => {
     motors.forEach(motor => motor[index].writeSync(on))
   })
   if (++step === steps.length) step = 0
-  while (process.hrtime.bigint() < stepStartTime + nanoSecondsPerStep);
-}
+  if (revLog.enabled) {
+    if (!Math.floor(++revSteps % stepsPerRevolution)) {
+      revLog('Did revolutions:', revSteps / stepsPerRevolution)
+    }
+  }
+}, nanoSecondsPerStep)
