@@ -4,6 +4,7 @@ import parseEnvJson from './parseEnvJson.js'
 import Ajv from 'ajv'
 import intervalSync from './intervalSync.js'
 import { debuglog } from 'util'
+import parseEnvFloat from './parseEnvFloat.js'
 const ajv = new Ajv()
 config()
 
@@ -31,8 +32,7 @@ const motors = motorPortsArr.map(ports => ports.map(port => new Gpio(port, 'out'
 
 // From
 // eslint-disable-next-line max-len
-// https://github.com/arduino-libraries/Stepper/blob/7e5e0974563d025fd23dfe35caa2d115d96554af/src/Stepper.cpp#L56-L62
-
+// https://www.idc-online.com/technical_references/pdfs/electrical_engineering/Step_Sequence_of_Stepper_Motor.pdf
 const steps = [
   [1, 0, 0, 1],
   [1, 1, 0, 0],
@@ -43,7 +43,7 @@ const steps = [
 /**
  * Rotations per minute
  */
-const rpm = 15
+const rpm = parseEnvFloat('RPM')
 const stepsPerRevolution = 2037.8864
 
 const nanoSecondsPerStep = BigInt(Math.floor(
