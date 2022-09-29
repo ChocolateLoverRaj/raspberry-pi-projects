@@ -44,7 +44,7 @@ const steps = [
  * Rotations per minute
  */
 const rpm = parseEnvFloat('RPM')
-const stepsPerRevolution = 2037.8864
+const stepsPerRevolution = parseEnvFloat('STEPS_PER_REVOLUTION')
 
 const nanoSecondsPerStep = BigInt(Math.floor(
   // Minutes per revolution
