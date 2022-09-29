@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@hkaspy/joystick-linux": "^1.2.0",
+    "ajv": "^8.11.0",
+    "dirname-filename-esm": "^1.1.1",
+    "dotenv": "^16.0.2",
+    "onoff": "^6.0.3"
+  }
+}
