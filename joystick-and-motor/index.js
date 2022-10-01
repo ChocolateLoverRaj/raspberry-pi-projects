@@ -44,8 +44,7 @@ new Joystick('/dev/input/js0', { includeInit: true })
         if (!startStopArray[0]) {
           startMotor()
         }
-      }
-      if (stopTimeout === undefined && startStopArray[0]) {
+      } else if (stopTimeout === undefined && startStopArray[0]) {
         stopTimeout = setTimeout(stopMotor, idleTimeout)
       }
     }
