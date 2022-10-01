@@ -39,4 +39,4 @@ async function createServer () {
   })
 }
 
-createServer()
+export default createServer
