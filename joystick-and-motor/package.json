@@ -2,6 +2,7 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@extra-bigint/max": "^0.0.62",
     "@hkaspy/joystick-linux": "^1.2.0",
     "ajv": "^8.11.0",
     "dirname-filename-esm": "^1.1.1",

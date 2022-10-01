@@ -6,6 +6,7 @@ import parseEnvJson from './parseEnvJson.js'
 import Ajv from 'ajv'
 import parseEnvFloat from './parseEnvFloat.js'
 import { debuglog } from 'util'
+import bigintMax from '@extra-bigint/max'
 config()
 
 const shouldLogSteps = debuglog('steps').enabled
@@ -87,9 +88,12 @@ while (true) {
   ) {
     const fraction = getFraction()
     nanoSecondsPerStep = getNsPerStep(fraction)
+    if (fraction === 0) {
+      motor.forEach(gpio => gpio.writeSync(0))
+    }
     if (shouldLogSteps && fraction === 0) {
       writeSync(1, `Step: ${step}. Motor stopped. Move joystick to rotate motor\n`)
     }
   }
-  lastAction = (lastAction + nanoSecondsPerStep) - now
+  lastAction = bigintMax((lastAction + nanoSecondsPerStep) - now, -1000n)
 };
