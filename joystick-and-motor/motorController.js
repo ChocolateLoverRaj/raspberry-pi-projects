@@ -1,4 +1,4 @@
-import { workerData } from 'node:worker_threads'
+import { workerData, parentPort } from 'node:worker_threads'
 import { writeSync } from 'fs'
 import { config } from 'dotenv'
 import { Gpio } from 'onoff'
@@ -27,7 +27,8 @@ if (!validate(motorPins)) {
   throw new Error('Invalid MOTORS env var')
 }
 const motor = motorPins.map(pin => new Gpio(pin, 'out'))
-const joystickInput = new Int16Array(workerData, 0, 1)
+const shouldDoWhileLoop = new Uint8Array(workerData, 0, 1)
+const joystickInput = new Int16Array(workerData, 8, 1)
 
 const maxRpm = parseEnvFloat('MAX_RPM')
 const stepsPerRevolution = parseEnvFloat('STEPS_PER_REVOLUTION')
@@ -59,41 +60,44 @@ const getNsPerStep = fraction => fraction === 0
         // Nanoseconds per step
         60 * (10 ** 3) ** 3)))
 
-// let lastJoystickPos
-let step = 0
-let lastAction = 0n
-while (true) {
-  const fraction = getFraction()
-  let nanoSecondsPerStep = getNsPerStep(fraction)
-  if (shouldLogSteps) {
-    writeSync(1, `Step: ${step}. RPM fraction: ${fraction}. ns per step: ${nanoSecondsPerStep}\n`)
-  }
-
-  if (nanoSecondsPerStep !== undefined) {
-    steps[step].forEach((on, index) => {
-      motor[index].writeSync(on)
-    })
-    if (fraction > 0) {
-      if (--step === -1) step = steps.length - 1
-    } else {
-      if (++step === steps.length) step = 0
-    }
-  }
-
-  lastAction += process.hrtime.bigint()
-  let now
-  while (
-    nanoSecondsPerStep === undefined ||
-    (now = process.hrtime.bigint()) < lastAction + nanoSecondsPerStep
-  ) {
+parentPort.on('message', () => {
+  let step = 0
+  let lastAction = 0n
+  writeSync(1, 'Starting while loop to control motor\n')
+  while (shouldDoWhileLoop[0]) {
     const fraction = getFraction()
-    nanoSecondsPerStep = getNsPerStep(fraction)
-    if (fraction === 0) {
-      motor.forEach(gpio => gpio.writeSync(0))
+    let nanoSecondsPerStep = getNsPerStep(fraction)
+    if (shouldLogSteps) {
+      writeSync(1, `Step: ${step}. RPM fraction: ${fraction}. ns per step: ${nanoSecondsPerStep}\n`)
     }
-    if (shouldLogSteps && fraction === 0) {
-      writeSync(1, `Step: ${step}. Motor stopped. Move joystick to rotate motor\n`)
+
+    if (nanoSecondsPerStep !== undefined) {
+      steps[step].forEach((on, index) => {
+        motor[index].writeSync(on)
+      })
+      if (fraction > 0) {
+        if (--step === -1) step = steps.length - 1
+      } else {
+        if (++step === steps.length) step = 0
+      }
     }
+
+    lastAction += process.hrtime.bigint()
+    let now
+    while (
+      nanoSecondsPerStep === undefined ||
+      (now = process.hrtime.bigint()) < lastAction + nanoSecondsPerStep
+    ) {
+      if (!shouldDoWhileLoop[0]) return
+      const fraction = getFraction()
+      nanoSecondsPerStep = getNsPerStep(fraction)
+      if (fraction === 0) {
+        motor.forEach(gpio => gpio.writeSync(0))
+      }
+      if (shouldLogSteps && fraction === 0) {
+        writeSync(1, `Step: ${step}. Motor stopped. Move joystick to rotate motor\n`)
+      }
+    }
+    lastAction = bigintMax((lastAction + nanoSecondsPerStep) - now, -1000n)
   }
-  lastAction = bigintMax((lastAction + nanoSecondsPerStep) - now, -1000n)
-};
+})
