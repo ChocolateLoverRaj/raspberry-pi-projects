@@ -2,6 +2,7 @@ import { Command } from 'commander'
 import jsonfile from 'jsonfile'
 import dev from './dev.js'
 import uploadCert from './uploadCert.js'
+import passwordOptions from './passwordOptions.js'
 
 const packageJson = jsonfile.readFileSync('package.json')
 const program = new Command()
@@ -11,6 +12,7 @@ const program = new Command()
 
 program.command('dev')
   .description('Start dev server')
+  .option(`-p, --password <${passwordOptions.join('|')}>`, 'When is password required?', 'write')
   .action(dev)
 
 program.command('upload-cert')
