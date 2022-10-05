@@ -1,5 +1,8 @@
 {
-  "extends": "standard",
+  "extends": [
+    "standard",
+    "standard-jsx"
+  ],
   "rules": {
     "max-len": [
       "error",
