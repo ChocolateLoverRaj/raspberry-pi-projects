@@ -1,18 +1,20 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 function App () {
   const [shuttingDown, setShuttingDown] = useState(false)
 
   return (
-    <div className="App">
+    <div className='App'>
       <button
         onClick={() => {
           setShuttingDown(true)
-            const promise = fetch('/api/shutdownNow', { method: 'POST' })
+          const { protocol, hostname } = window.location
+          const { API_PORT } = process.env
+          fetch(`${protocol}//${hostname}:${API_PORT}/api/shutdownNow`, { method: 'POST' })
         }}
       >
-        {shuttingDown ? 'Shutting down...' : 'Shutdown'}
+        {shuttingDown ? 'Shutting down...' : 'Shutdown now'}
       </button>
     </div>
   )

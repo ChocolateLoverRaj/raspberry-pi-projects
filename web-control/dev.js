@@ -9,6 +9,8 @@ import { once } from 'events'
 import { exec } from 'child_process'
 import passwordOptions from './passwordOptions.js'
 import streamToString from 'stream-to-string'
+import cors from 'cors'
+import { networkInterfaces } from 'os'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -54,18 +56,42 @@ async function createServer ({ password }) {
   }
   const app = express()
 
-  const [vite, port, key, cert] = await Promise.all([
-    createViteServer({
-      server: { middlewareMode: true }
-    }),
+  const [vitePort, key, cert, apiPort] = await Promise.all([
     getPort({ port: [80, 3456] }),
     readFile('server.key'),
-    readFile('server.cert')
+    readFile('server.cert'),
+    getPort({ port: [9191, 8282, 7373] })
   ])
+  const httpsOptions = { key, cert }
 
-  app.use((req, res, next) => {
-    if (req.secure) return next()
-    res.status(400).end('HTTPS must be used')
+  const viteServer = await createViteServer({
+    server: {
+
+      https: httpsOptions,
+      port: vitePort,
+      strictPort: true,
+      host: true
+    },
+    define: {
+      'process.env.API_PORT': JSON.stringify(apiPort)
+    }
+
+  })
+  await viteServer.listen()
+  viteServer.printUrls()
+
+  const getOrigins = () => [
+    ...Object.values(networkInterfaces()).flat().map(({ address }) => address),
+    'localhost'
+  ].map(address => `https://${address}:${vitePort}`)
+  app.use(cors({
+    origin: (origin, callback) => callback(null, getOrigins())
+  }), (req, res, next) => {
+    if (getOrigins().includes(req.headers.origin)) {
+      next()
+    } else {
+      res.sendStatus(403)
+    }
   })
 
   app.post('/api/shutdownNow', async (req, res, next) => {
@@ -74,13 +100,8 @@ async function createServer ({ password }) {
     }
   })
 
-  app.use(vite.middlewares)
-
-  createHttpsServer({
-    key,
-    cert
-  }, app).listen(port, () => {
-    console.log(`Server is listening on port ${port}`)
+  createHttpsServer(httpsOptions, app).listen(apiPort, () => {
+    console.log(`Api server is listening on port ${apiPort}`)
   })
 }
 
