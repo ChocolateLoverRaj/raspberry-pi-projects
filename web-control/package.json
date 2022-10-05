@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon index.js dev",
     "build": "vite build",
-    "preview": "vite preview"
+    "start": "node index.js serve"
   },
   "dependencies": {
     "commander": "^9.4.1",

@@ -4,11 +4,12 @@ import { fileURLToPath } from 'url'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
 import { createServer as createHttpsServer } from 'https'
-import { readFile } from 'fs/promises'
 import passwordOptions from './passwordOptions.js'
 import cors from 'cors'
 import { networkInterfaces } from 'os'
 import apiRouter from './apiRouter.js'
+import readHttpsFiles from './readHttpsFiles.js'
+import htmlPorts from './htmlPorts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -21,13 +22,11 @@ async function createServer ({ password }) {
   }
   const app = express()
 
-  const [vitePort, key, cert, apiPort] = await Promise.all([
-    getPort({ port: [80, 3456] }),
-    readFile('server.key'),
-    readFile('server.cert'),
+  const [vitePort, httpsOptions, apiPort] = await Promise.all([
+    getPort({ port: htmlPorts }),
+    readHttpsFiles(),
     getPort({ port: [9191, 8282, 7373] })
   ])
-  const httpsOptions = { key, cert }
 
   const viteServer = await createViteServer({
     server: {
