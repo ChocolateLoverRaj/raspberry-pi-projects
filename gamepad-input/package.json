@@ -6,6 +6,7 @@
     "@hkaspy/joystick-linux": "github:ChocolateLoverRaj/joystick-linux#103e4d0",
     "dotenv": "^16.0.2",
     "node-ble": "github:tuxedoxt/node-ble#fca927b",
-    "onoff": "^6.0.3"
+    "onoff": "^6.0.3",
+    "stream-chunker": "^1.2.8"
   }
 }
