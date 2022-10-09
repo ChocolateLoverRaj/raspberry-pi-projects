@@ -10,7 +10,7 @@ Install dependencies (usually with `npm i`)
 Run the [examples](#examples)
 
 ### GPIO Setup
-#### `joystickInput.js` 
+#### `inputLogger.js` 
 Does not need a GPIO (I think it could work on any Linux device)
 
 #### `autoConnect.js`
@@ -27,7 +27,7 @@ node autoConnect.js
 ```
 
 ## Examples
-### `joystickInput.js`
+### `inputLogger.js`
 - Watches for gamepads being connected and disconnected
 - Outputs events for every gamepad when you press a button or move an axis
 
