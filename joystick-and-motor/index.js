@@ -1,10 +1,13 @@
-import Joystick from '@hkaspy/joystick-linux'
+import joysticksEventEmitter from './joysticksEventEmitter.js'
 import { dirname } from 'dirname-filename-esm'
 import { Worker } from 'node:worker_threads'
 import { join } from 'path'
 import { config } from 'dotenv'
 import parseEnvFloat from './parseEnvFloat.js'
+import parseEnvInt from './parseEnvInt.js'
 config()
+
+const readGamepadDelay = parseEnvInt('READ_GAMEPAD_DELAY')
 
 const sharedArrayBuffer = new SharedArrayBuffer(8 + 16)
 const startStopArray = new Uint8Array(sharedArrayBuffer, 0, 1)
@@ -34,8 +37,8 @@ const stopMotor = () => {
 const idleTimeout = parseEnvFloat('IDLE_TIMEOUT')
 let stopTimeout
 
-new Joystick('/dev/input/js0', { includeInit: true })
-  .on('update', ({ number, type, value }) => {
+joysticksEventEmitter(readGamepadDelay)
+  .on('input', (_joystickNumber, { number, type, value }) => {
     if (type === 'AXIS' && number === 1) {
       joystickAxisArray[0] = value
       if (value !== 0) {

@@ -3,10 +3,10 @@
   "private": true,
   "dependencies": {
     "@extra-bigint/max": "^0.0.62",
-    "@hkaspy/joystick-linux": "^1.2.0",
     "ajv": "^8.11.0",
     "dirname-filename-esm": "^1.1.1",
     "dotenv": "^16.0.2",
-    "onoff": "^6.0.3"
+    "onoff": "^6.0.3",
+    "stream-chunker": "^1.2.8"
   }
 }
