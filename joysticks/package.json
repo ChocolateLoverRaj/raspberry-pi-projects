@@ -1,0 +1,9 @@
+{
+  "name": "joysticks",
+  "private": true,
+  "type": "module",
+  "main": "./joysticksEventEmitter.js",
+  "dependencies": {
+    "stream-chunker": "^1.2.8"
+  }
+}

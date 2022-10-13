@@ -1,0 +1,6 @@
+{
+  "name": "parse-env-json",
+  "private": true,
+  "type": "module",
+  "main": "./parseEnvJson.js"
+}

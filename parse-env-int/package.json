@@ -1,0 +1,6 @@
+{
+  "name": "parse-env-int",
+  "private": true,
+  "type": "module",
+  "main": "./parseEnvInt.js"
+}
