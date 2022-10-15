@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mcp-spi-adc": "^3.2.0"
+  }
+}
