@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "parse-env-int": "link:../parse-env-int",
+    "parse-env-json": "link:../parse-env-json",
+    "pigpio": "^3.3.1"
+  }
+}
