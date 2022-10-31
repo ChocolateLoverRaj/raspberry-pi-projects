@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "ble-peripheral": "github:ChocolateLoverRaj/ble-peripheral"
+  }
+}
