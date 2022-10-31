@@ -1,13 +1,13 @@
 import BlePeripheral from 'ble-peripheral'
+import ids from '../ids.json' assert { type: 'json' }
 
 const serviceName = 'com.sharedValue'
-const serviceUuid = '44214494-baef-4519-889f-b45c07c68dfd'
 
-const bp = new BlePeripheral(serviceName, serviceUuid, () => {
+const bp = new BlePeripheral(serviceName, ids.serviceUuid, () => {
   bp.logCharacteristicsIO = true
 
   const sharedValue = bp.Characteristic(
-    'b08f2d63-dd27-4e79-8371-3b3ff08ebbbb',
+    ids.characteristicUuid,
     'sharedValue',
     ['read', 'write', 'notify'])
 
