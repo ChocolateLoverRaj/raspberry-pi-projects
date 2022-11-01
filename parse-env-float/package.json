@@ -1,0 +1,6 @@
+{
+  "name": "parse-env-float",
+  "private": true,
+  "type": "module",
+  "main": "./parseEnvFloat.js"
+}

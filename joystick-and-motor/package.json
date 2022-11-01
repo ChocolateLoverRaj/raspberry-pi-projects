@@ -6,7 +6,11 @@
     "ajv": "^8.11.0",
     "dirname-filename-esm": "^1.1.1",
     "dotenv": "^16.0.2",
+    "joysticks": "link:../joysticks",
     "onoff": "^6.0.3",
+    "parse-env-float": "link:../parse-env-float",
+    "parse-env-int": "link:../parse-env-int",
+    "parse-env-json": "link:../parse-env-json",
     "stream-chunker": "^1.2.8"
   }
 }

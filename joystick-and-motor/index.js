@@ -1,10 +1,10 @@
-import joysticksEventEmitter from './joysticksEventEmitter.js'
+import joysticksEventEmitter from 'joysticks'
 import { dirname } from 'dirname-filename-esm'
 import { Worker } from 'node:worker_threads'
 import { join } from 'path'
 import { config } from 'dotenv'
-import parseEnvFloat from './parseEnvFloat.js'
-import parseEnvInt from './parseEnvInt.js'
+import parseEnvFloat from 'parse-env-float'
+import parseEnvInt from 'parse-env-int'
 config()
 
 const readGamepadDelay = parseEnvInt('READ_GAMEPAD_DELAY')
