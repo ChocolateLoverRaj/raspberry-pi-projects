@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import useConstant from 'use-constant'
 import Props from './Props'
 import createPendingPromise from 'observables/lib/observablePromise/createPendingPromise'

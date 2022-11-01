@@ -11,7 +11,7 @@ const bp = new BlePeripheral(serviceName, ids.serviceUuid, () => {
     'sharedValue',
     ['read', 'write', 'notify'])
 
-  sharedValue.on('WriteValue', (device, arg1) => {
+  sharedValue.on('WriteValue', (_device, arg1) => {
     sharedValue.setValue(arg1)
     sharedValue.notify()
   })

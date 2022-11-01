@@ -9,20 +9,22 @@ import getSetPromise from 'observables/lib/setAsync/getSetPromise'
 const ReadValue = reactObserver<Props>((observe, { characteristic, initialValue }) => {
   const [value, setValue] = useState(initialValue)
 
-  const setAsync = useConstant(() => createSetAsync<void>())
+  const setAsync = useConstant(() => createSetAsync<undefined>())
   const promiseData = observe(getSetPromise(setAsync))
 
   useEffect(() => {
-    const handler = () => {
+    const handler = (): void => {
       setValue(new TextDecoder().decode(characteristic.value))
     }
     characteristic.addEventListener('characteristicvaluechanged', handler)
     // FIXME: https://bugs.chromium.org/p/chromium/issues/detail?id=1380446
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       characteristic.startNotifications()
     }, 100)
     return () => {
       characteristic.removeEventListener('characteristicvaluechanged', handler)
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       characteristic.stopNotifications()
     }
   }, [])

@@ -1,5 +1,5 @@
 interface Props {
-  characteristic: BluetoothRemoteGATTCharacteristic,
+  characteristic: BluetoothRemoteGATTCharacteristic
   initialValue: string
 }
 

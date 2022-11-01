@@ -10,7 +10,7 @@ const RequestDeviceSuccess = reactObserver<Props>((observe, { device }) => {
 
   return (
     <>
-      {promiseData !== undefined && promiseData.done
+      {promiseData.done
         ? promiseData.result.success
           ? <GotCharacteristic characteristic={promiseData.result.result} />
           : 'Error getting BLE characteristic'

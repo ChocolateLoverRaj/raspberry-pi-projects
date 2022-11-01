@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import FailableResult from 'observables/lib/failableResult/FailableResult'
 import Props from './Props'
 import RequestDeviceSuccess from '../requestDeviceSuccess/RequestDeviceSuccess'
 

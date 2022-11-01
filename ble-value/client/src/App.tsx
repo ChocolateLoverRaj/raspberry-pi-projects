@@ -9,7 +9,8 @@ import createFromPromise from 'observables/lib/observablePromise/createFromPromi
 import RequestDeviceDone from './requestDeviceDone/RequestDeviceDone'
 
 const App = reactObserver(observe => {
-  const observableValue = useConstant(() => create<ObservablePromise<BluetoothDevice> | undefined>(undefined))
+  const observableValue = useConstant(
+    () => create<ObservablePromise<BluetoothDevice> | undefined>(undefined))
   const observablePromise = observe(observableValue.observable)
   const promiseData = observablePromise !== undefined ? observe(observablePromise) : undefined
 
@@ -27,7 +28,7 @@ const App = reactObserver(observe => {
       >
         {promiseData?.done === false ? 'Connecting' : 'Connect'} to BLE peripheral
       </button>
-      {promiseData !== undefined && promiseData.done && (
+      {promiseData?.done === true && (
         <>
           <br />
           <RequestDeviceDone result={promiseData.result} />

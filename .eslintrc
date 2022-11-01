@@ -1,7 +1,9 @@
 {
+  "root": true,
   "extends": [
     "standard",
-    "standard-jsx"
+    "standard-jsx",
+    "standard-with-typescript"
   ],
   "rules": {
     "max-len": [
@@ -14,5 +16,12 @@
         "varsIgnorePattern": "^_"
       }
     ]
-  }
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": [
+    "vite-env.d.ts",
+    "/ble-value/server/index.js"
+  ]
 }
