@@ -9,7 +9,7 @@ config()
 
 const readGamepadDelay = parseEnvInt('READ_GAMEPAD_DELAY')
 
-const sharedArrayBuffer = new SharedArrayBuffer(8 + 16)
+const sharedArrayBuffer = new SharedArrayBuffer(8 + 16 + 32)
 const startStopArray = new Uint8Array(sharedArrayBuffer, 0, 1)
 const joystickAxisArray = new Int16Array(sharedArrayBuffer, 8, 1)
 
