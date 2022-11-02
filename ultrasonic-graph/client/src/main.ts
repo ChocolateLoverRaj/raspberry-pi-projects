@@ -1,37 +1,68 @@
+import { serviceUuid, characteristicUuid } from '../../ids.json'
+import never from 'never'
+import Chart from 'chart.js/auto'
+
 const button = document.createElement('button')
 button.innerText = 'requestDevice'
 document.body.appendChild(button)
 
-const cpuTempP = document.createElement('p')
-document.body.appendChild(cpuTempP)
+const errorP = document.createElement('p')
+document.body.appendChild(errorP)
 
-button.addEventListener('click', async () => {
-  try {
-    const serviceId = 'f04932f9-a746-4099-b274-e63ac3079db3'
-    const cpuTempCharacteristic = '00000006-94f3-4011-be53-6ac36bf22cf1'
+button.addEventListener('click', () => {
+  (async () => {
     const device = await navigator.bluetooth.requestDevice({
       filters: [{
-        services: [serviceId]
+        services: [serviceUuid]
       }]
     })
     console.log(device)
-    await device.gatt.connect()
-    const service = await device.gatt.getPrimaryService(serviceId)
+    const gatt = device.gatt ?? never()
+
+    await gatt.connect()
+    const service = await gatt.getPrimaryService(serviceUuid)
     console.log(service)
-    const characteristic = await service.getCharacteristic(cpuTempCharacteristic)
+    const characteristic = await service.getCharacteristic(characteristicUuid)
     console.log(characteristic)
-    const updateCpuTempUi = () => {
-      const cpuTempDataView = characteristic.value
-      console.log(cpuTempDataView)
-      const cpuTempStr = new TextDecoder().decode(cpuTempDataView)
-      console.log(cpuTempStr)
-      cpuTempP.innerText = `Raspberry Pi CPU Temp: ${cpuTempStr}`
-    }
-    characteristic.addEventListener('characteristicvaluechanged', updateCpuTempUi)
-    await characteristic.readValue()
-    await characteristic.startNotifications()
-  } catch (e) {
+    const sensorUuids = JSON.parse(
+      new TextDecoder().decode(await characteristic.readValue())) as string[]
+
+    console.log(sensorUuids)
+
+    sensorUuids.forEach(() => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d') ?? never()
+      const labels = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June'
+      ]
+
+      const data = {
+        labels,
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+      }
+
+      const config = {
+        type: 'line',
+        data,
+        options: {}
+      }
+      const myChart = new Chart(ctx, config)
+      document.body.appendChild(canvas)
+    })
+  })().catch(e => {
     console.error(e)
-    cpuTempP.innerText = e.toString()
-  }
+    errorP.innerText = e.toString()
+  })
 })
+
+export {}

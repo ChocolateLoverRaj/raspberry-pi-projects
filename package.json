@@ -16,5 +16,9 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.8",
     "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "chart.js": "^3.9.1",
+    "never": "^1.1.0"
   }
 }
