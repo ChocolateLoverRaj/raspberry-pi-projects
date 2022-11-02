@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "ble-peripheral": "github:ChocolateLoverRaj/ble-peripheral#emit-notify",
+    "dotenv": "^16.0.3",
+    "parse-env-int": "link:../parse-env-int",
+    "parse-env-json-schema": "link:../../parse-env-json-schema",
+    "pigpio": "^3.3.1"
+  }
+}
