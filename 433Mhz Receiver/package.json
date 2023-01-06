@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "onoff": "^6.0.3",
+    "parse-env-int": "link:../parse-env-int"
+  }
+}
